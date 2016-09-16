@@ -93,6 +93,22 @@ public class Machine1 {
         }
     }
 
+    /**
+     * 1. Product 클래스는 내부 클래스가 아닌 일반 클래스로 생성 되야 할 것 같다
+     * 내부 클래스로 존재할게 아니라 외부에서 주입받아야되는 대상이라고 생각됨.
+     *
+     * 2. 실제 자판기를 생각해보자.
+     * 원래 자판기는 상품을 갖고 있는게 아니라 자판기 관리자가 자판기에 상품을 넣는(주입)다.
+     * 테스트 코드를 작성하다보니 Product 코드는 외부에서 주입 받는게 더 테스트 코드를 작성하기에
+     * 좋다고 판단된다.
+     *
+     * 3.MachineTest1.동전_입력_후_상품_리스트 메소드를 보면 상품 리스트를 가져와서
+     * count를 계산 할게 아니라, mock객체로 product를 주입해 테스트하는게 맞는듯하다.
+     * 지금과 같은 코드는 Machine 코드안에 product amount를 몇개로 생성했느냐를 봐야만
+     * 테스트 코드를 작성할 수 있다. 하지만 외부에서 mock객체를 주입한다면 구지 Machine
+     * 클래스를 확인 할 필요가 있을까?
+     *
+     */
     public static class Product {
         private String productName;
         private int price;
@@ -113,6 +129,9 @@ public class Machine1 {
             return isBuy && amount > 0;
         }
 
+        /**
+         * 상품을 구매와 구매에 필요한 데이터 처리는 Machine이 하는게 적당한거 같다.
+         */
         public void buy() {
             if(isBuy()) {
                 amount--;

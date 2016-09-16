@@ -61,7 +61,14 @@ public class MachineTest1 {
         assertNotNull(product);
     }
 
-    // todo 개선이 필요할듯
+    /**
+     * 1. 2000원을 넣고, 4번 구매를 발생시켜 NotBuyProduct1 에러를 발생시키는게
+     * 좋을 테스트 코드일까?
+     *
+     * 2. 4번 구매를 발생 시킨다는 것은 Machine 코드를 들여다 봐야된다.
+     *
+     * @throws Exception
+     */
     @Test(expected = NotBuyProduct1.class)
     public void test_상품구매_요청_수량_부족() throws Exception {
         machine.insertCoin(2000);
@@ -72,7 +79,11 @@ public class MachineTest1 {
         machine.buy(Machine1.COLA);
     }
 
-    // todo 여기는 mock 객체를 사용하는게 좋을듯.
+    /**
+     * mock 객체를 사용해서 테스트 코드 자체에서 Machine에 ProductMock을 주입한다면
+     * 더 깔끔한 코드와 테스트 코드를 작성할 수 있지 않을까?
+     * @throws Exception
+     */
     @Test
     public void 동전_입력_후_상품_리스트() throws Exception {
         machine.insertCoin(1000);
