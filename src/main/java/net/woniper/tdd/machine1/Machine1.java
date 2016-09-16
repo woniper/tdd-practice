@@ -1,6 +1,6 @@
-package net.woniper.tdd.test.machine;
+package net.woniper.tdd.machine1;
 
-import net.woniper.tdd.test.machine.exception.NotBuyProduct;
+import net.woniper.tdd.machine1.exception.NotBuyProduct1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Created by woniper on 2016. 9. 13..
  */
-public class Machine {
+public class Machine1 {
 
     public static final String COLA =   "콜라";
     public static final String CIDER =  "사이다";
@@ -21,7 +21,7 @@ public class Machine {
     private Money money = new Money();
     private List<Product> products;
 
-    public Machine() {
+    public Machine1() {
         this.products = initProducts();
     }
 
@@ -73,12 +73,12 @@ public class Machine {
                     product.buy();
                     return product;
                 } else {
-                    throw new NotBuyProduct("금액 부족 또는 수량 부족" + product.toString());
+                    throw new NotBuyProduct1("금액 부족 또는 수량 부족" + product.toString());
                 }
             }
         }
 
-        throw new NotBuyProduct(productName);
+        throw new NotBuyProduct1(productName);
     }
 
     private class Money {

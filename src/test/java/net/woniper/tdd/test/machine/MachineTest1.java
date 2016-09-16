@@ -1,6 +1,7 @@
 package net.woniper.tdd.test.machine;
 
-import net.woniper.tdd.test.machine.exception.NotBuyProduct;
+import net.woniper.tdd.machine1.Machine1;
+import net.woniper.tdd.machine1.exception.NotBuyProduct1;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,13 +13,13 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Created by woniper on 2016. 9. 13..
  */
-public class MachineTest {
+public class MachineTest1 {
 
-    private Machine machine;
+    private Machine1 machine;
 
     @Before
     public void setUp() throws Exception {
-        machine = new Machine();
+        machine = new Machine1();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -47,36 +48,36 @@ public class MachineTest {
         machine.buy(null);
     }
 
-    @Test(expected = NotBuyProduct.class)
+    @Test(expected = NotBuyProduct1.class)
     public void test_상품구매_요청_미등록_상품_notFound() throws Exception {
         machine.insertCoin(500);
         machine.buy("아무거나");
     }
 
-    @Test(expected = NotBuyProduct.class)
+    @Test(expected = NotBuyProduct1.class)
     public void test_상품구매_요청_금액_부족() throws Exception {
         machine.insertCoin(500);
-        Machine.Product product = machine.buy(Machine.CIDER);
+        Machine1.Product product = machine.buy(Machine1.CIDER);
         assertNotNull(product);
     }
 
     // todo 개선이 필요할듯
-    @Test(expected = NotBuyProduct.class)
+    @Test(expected = NotBuyProduct1.class)
     public void test_상품구매_요청_수량_부족() throws Exception {
         machine.insertCoin(2000);
-        machine.buy(Machine.COLA);
-        machine.buy(Machine.COLA);
-        machine.buy(Machine.COLA);
+        machine.buy(Machine1.COLA);
+        machine.buy(Machine1.COLA);
+        machine.buy(Machine1.COLA);
         // 이 부분에서 수량부족 에러
-        machine.buy(Machine.COLA);
+        machine.buy(Machine1.COLA);
     }
 
     // todo 여기는 mock 객체를 사용하는게 좋을듯.
     @Test
     public void 동전_입력_후_상품_리스트() throws Exception {
         machine.insertCoin(1000);
-        List<Machine.Product> products = machine.getProducts();
-        long isBuyCount = products.stream().filter(Machine.Product::isBuy).count();
+        List<Machine1.Product> products = machine.getProducts();
+        long isBuyCount = products.stream().filter(Machine1.Product::isBuy).count();
         assertEquals(isBuyCount, 3);
     }
 }
