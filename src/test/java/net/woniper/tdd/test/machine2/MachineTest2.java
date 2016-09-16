@@ -1,6 +1,9 @@
 package net.woniper.tdd.test.machine2;
 
-import net.woniper.tdd.test.machine2.exception.ImpossibleBuyProductException;
+import net.woniper.tdd.machine2.MachineService;
+import net.woniper.tdd.machine2.Product;
+import net.woniper.tdd.machine2.ProductRepository;
+import net.woniper.tdd.machine2.exception.ImpossibleBuyProductException;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.machine2;
+package net.woniper.tdd.machine2;
 
 import java.util.List;
 

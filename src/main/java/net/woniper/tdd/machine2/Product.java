@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.machine2;
+package net.woniper.tdd.machine2;
 
 /**
  * Created by woniper on 2016. 9. 16..
