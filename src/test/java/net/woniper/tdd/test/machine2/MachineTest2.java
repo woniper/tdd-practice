@@ -1,8 +1,8 @@
 package net.woniper.tdd.test.machine2;
 
-import net.woniper.tdd.machine2.MachineService;
-import net.woniper.tdd.machine2.Product;
-import net.woniper.tdd.machine2.ProductRepository;
+import net.woniper.tdd.machine2.MachineService2;
+import net.woniper.tdd.machine2.Product2;
+import net.woniper.tdd.machine2.ProductRepository2;
 import net.woniper.tdd.machine2.exception.ImpossibleBuyProductException;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,24 +21,24 @@ import static org.mockito.Mockito.when;
  */
 public class MachineTest2 {
 
-    private MachineService machineService;
+    private MachineService2 machineService;
     private String COLA = "콜라";
     private String CIDER = "사이다";
     private String COFFEE = "커피";
-    private ProductRepository productRepository;
+    private ProductRepository2 productRepository;
 
     @Before
     public void setUp() throws Exception {
-        machineService = new MachineService();
-        productRepository = mock(ProductRepository.class);
+        machineService = new MachineService2();
+        productRepository = mock(ProductRepository2.class);
         fixtureMockProudct();
         machineService.setProductRepository(productRepository);
     }
 
     private void fixtureMockProudct() {
-        Product cola = new Product(COLA, 500, 3);
-        Product cider = new Product(CIDER, 700, 2);
-        Product coffee = new Product(COFFEE, 1200, 1);
+        Product2 cola = new Product2(COLA, 500, 3);
+        Product2 cider = new Product2(CIDER, 700, 2);
+        Product2 coffee = new Product2(COFFEE, 1200, 1);
         when(productRepository.findAll()).thenReturn(Arrays.asList(cola, cider, coffee));
         when(productRepository.findByName(COLA)).thenReturn(cola);
         when(productRepository.findByName(CIDER)).thenReturn(cider);
@@ -96,7 +96,7 @@ public class MachineTest2 {
         machineService.insertCoin(1000);
 
         // when
-        Product product = machineService.buy(COLA);
+        Product2 product = machineService.buy(COLA);
 
         // then
         assertNotNull(product);

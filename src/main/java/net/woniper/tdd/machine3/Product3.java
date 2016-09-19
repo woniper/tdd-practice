@@ -1,33 +1,17 @@
-package net.woniper.tdd.machine2;
+package net.woniper.tdd.machine3;
 
 /**
  * Created by woniper on 2016. 9. 16..
  */
-public class Product {
+public class Product3 {
     private String name;
     private int price;
     private int amount;
 
-    public Product(String name, int price, int amount) {
+    public Product3(String name, int price, int amount) {
         this.name = name;
         this.price = price;
         this.amount = amount;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public boolean isBuyPossible(int price) {
-        return getPrice() <= price && getAmount() > 0;
     }
 
     @Override
@@ -37,5 +21,17 @@ public class Product {
                 ", price=" + price +
                 ", amount=" + amount +
                 '}';
+    }
+
+    public boolean impossibleBuy(int balance) {
+        return this.price <= balance && this.amount > 0;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void buy() {
+        this.amount--;
     }
 }

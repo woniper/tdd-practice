@@ -5,8 +5,8 @@ import java.util.List;
 /**
  * Created by woniper on 2016. 9. 16..
  */
-public interface ProductRepository {
-    List<Product> findAll();
+public interface ProductRepository2 {
+    List<Product2> findAll();
 
-    Product findByName(String name);
+    Product2 findByName(String name);
 }

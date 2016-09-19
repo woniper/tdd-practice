@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 /**
  * Created by woniper on 2016. 9. 16..
  */
-public class MachineService {
-    private ProductRepository productRepository;
+public class MachineService2 {
+    private ProductRepository2 productRepository;
     private int balance;
 
-    public void setProductRepository(ProductRepository productRepository) {
+    public void setProductRepository(ProductRepository2 productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -28,17 +28,17 @@ public class MachineService {
         return this.balance;
     }
 
-    private List<Product> getPossibleBuyProducts() {
+    private List<Product2> getPossibleBuyProducts() {
         return productRepository.findAll().stream()
                 .filter(product -> product.isBuyPossible(getBalance()))
                 .collect(Collectors.toList());
     }
 
-    public Product buy(String productName) {
+    public Product2 buy(String productName) {
         if(productName == null || productName.isEmpty())
             throw new ImpossibleBuyProductException();
 
-        Product product = productRepository.findByName(productName);
+        Product2 product = productRepository.findByName(productName);
 
         if(product == null || !product.isBuyPossible(getBalance()))
             throw new ImpossibleBuyProductException();
