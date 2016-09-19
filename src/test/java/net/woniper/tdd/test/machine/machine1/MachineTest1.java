@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.machine1;
+package net.woniper.tdd.test.machine.machine1;
 
 import net.woniper.tdd.machine1.Machine1;
 import net.woniper.tdd.machine1.exception.NotBuyProduct1;

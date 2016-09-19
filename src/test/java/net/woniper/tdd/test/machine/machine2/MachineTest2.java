@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.machine2;
+package net.woniper.tdd.test.machine.machine2;
 
 import net.woniper.tdd.machine2.MachineService2;
 import net.woniper.tdd.machine2.Product2;
