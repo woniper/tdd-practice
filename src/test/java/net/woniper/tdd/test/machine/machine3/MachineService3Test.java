@@ -1,9 +1,9 @@
 package net.woniper.tdd.test.machine.machine3;
 
-import net.woniper.tdd.machine3.MachineService3;
-import net.woniper.tdd.machine3.Product3;
-import net.woniper.tdd.machine3.ProductRepository3;
-import net.woniper.tdd.machine3.exception.ImpossibleBuyException;
+import net.woniper.tdd.machine.machine3.MachineService3;
+import net.woniper.tdd.machine.machine3.Product3;
+import net.woniper.tdd.machine.machine3.ProductRepository3;
+import net.woniper.tdd.machine.machine3.exception.ImpossibleBuyException;
 import org.junit.Before;
 import org.junit.Test;
 

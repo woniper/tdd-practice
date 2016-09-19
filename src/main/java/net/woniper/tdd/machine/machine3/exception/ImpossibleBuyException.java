@@ -1,4 +1,4 @@
-package net.woniper.tdd.machine3.exception;
+package net.woniper.tdd.machine.machine3.exception;
 
 /**
  * Created by woniper on 2016. 9. 16..

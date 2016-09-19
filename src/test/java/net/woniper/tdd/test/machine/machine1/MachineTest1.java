@@ -1,7 +1,7 @@
 package net.woniper.tdd.test.machine.machine1;
 
-import net.woniper.tdd.machine1.Machine1;
-import net.woniper.tdd.machine1.exception.NotBuyProduct1;
+import net.woniper.tdd.machine.machine1.Machine1;
+import net.woniper.tdd.machine.machine1.exception.NotBuyProduct1;
 import org.junit.Before;
 import org.junit.Test;
 

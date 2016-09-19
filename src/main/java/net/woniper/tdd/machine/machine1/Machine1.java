@@ -1,6 +1,6 @@
-package net.woniper.tdd.machine1;
+package net.woniper.tdd.machine.machine1;
 
-import net.woniper.tdd.machine1.exception.NotBuyProduct1;
+import net.woniper.tdd.machine.machine1.exception.NotBuyProduct1;
 
 import java.util.ArrayList;
 import java.util.List;

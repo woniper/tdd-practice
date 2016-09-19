@@ -1,6 +1,6 @@
-package net.woniper.tdd.machine3;
+package net.woniper.tdd.machine.machine3;
 
-import net.woniper.tdd.machine3.exception.ImpossibleBuyException;
+import net.woniper.tdd.machine.machine3.exception.ImpossibleBuyException;
 
 /**
  * Created by woniper on 2016. 9. 16..

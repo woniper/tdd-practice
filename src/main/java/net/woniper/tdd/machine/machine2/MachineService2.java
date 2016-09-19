@@ -1,6 +1,6 @@
-package net.woniper.tdd.machine2;
+package net.woniper.tdd.machine.machine2;
 
-import net.woniper.tdd.machine2.exception.ImpossibleBuyProductException;
+import net.woniper.tdd.machine.machine2.exception.ImpossibleBuyProductException;
 
 import java.util.List;
 import java.util.stream.Collectors;
