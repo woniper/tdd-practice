@@ -39,6 +39,11 @@ public class Searcher1 {
         return searchKeyword.length() > text.length();
     }
 
+    /**
+     * assertPrefixText 메소드와 똑같은 기능이다. 리팩토링 필요
+     * @param suffix
+     * @return
+     */
     private boolean assertSuffixText(String suffix) {
         if(!validText(suffix))
             return false;
