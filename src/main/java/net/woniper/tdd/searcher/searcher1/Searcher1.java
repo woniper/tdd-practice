@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.searcher.searcher1;
+package net.woniper.tdd.searcher.searcher1;
 
 /**
  * Created by woniper on 2016. 9. 19..

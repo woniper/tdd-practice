@@ -1,5 +1,6 @@
 package net.woniper.tdd.test.searcher.searcher1;
 
+import net.woniper.tdd.searcher.searcher1.Searcher1;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.isA;
