@@ -54,10 +54,8 @@ public class Searcher {
     }
 
     private boolean containsSuffixNumberOrAlphabetOrUnderscore(String suffix) {
-        if(isEmptyOrNull(suffix))
-            return false;
+        return !isEmptyOrNull(suffix) && containsNumberOrAlphabetOrUnderscore(suffix.substring(0, 1));
 
-        return containsNumberOrAlphabetOrUnderscore(suffix.substring(0, 1));
     }
 
     private boolean containsPrefixNumberOrAlphabetOrUnderscore(String prefix) {
