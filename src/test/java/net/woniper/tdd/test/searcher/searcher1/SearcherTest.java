@@ -14,13 +14,6 @@ public class SearcherTest {
 
     private final String SEARCH_TEXT = "flex";
 
-//    flex?  --> {flex}?
-//    (flex) --> ({flex})
-//    reflex --> 없음
-//    yes, flex1 --> 없음
-//    no, flexible --> 없음
-//    no a flex --> no a {flex}
-
     @Test
     public void testSearchText() throws Exception {
         assertSearchText("flex?", "{flex}?");
@@ -30,7 +23,7 @@ public class SearcherTest {
 
     private void assertSearchText(String keyword, String expected) {
         // given
-        Searcher searcher = new Searcher(keyword);
+        Searcher1 searcher = new Searcher1(keyword);
 
         // when
         String actual = searcher.search(SEARCH_TEXT);
@@ -43,7 +36,7 @@ public class SearcherTest {
     public void testSuffixQuestionText() throws Exception {
         // given
         String expected = "{flex}?";
-        Searcher searcher = new Searcher("flex?");
+        Searcher1 searcher = new Searcher1("flex?");
 
         // when
         String actual = searcher.search(SEARCH_TEXT);
@@ -79,7 +72,7 @@ public class SearcherTest {
 
     private void assertPrefixOrSuffixTextIsNull(String searchText) {
         // given
-        Searcher searcher = new Searcher(searchText);
+        Searcher1 searcher = new Searcher1(searchText);
 
         // when
         String actual = searcher.search(SEARCH_TEXT);
@@ -91,7 +84,7 @@ public class SearcherTest {
     @Test(expected = IllegalArgumentException.class)
     public void testSearchTextLength() throws Exception {
         // given
-        Searcher searcher = new Searcher("flex");
+        Searcher1 searcher = new Searcher1("flex");
 
         // when
         searcher.search("flex123");
@@ -100,7 +93,7 @@ public class SearcherTest {
     @Test
     public void testDefaultText() throws Exception {
         // given
-        Searcher searcher = new Searcher("flex?");
+        Searcher1 searcher = new Searcher1("flex?");
         String expected = "{flex}?";
 
         // when
@@ -113,7 +106,7 @@ public class SearcherTest {
     private void assertSearchIllegalArgumentEx(String text) {
         IllegalArgumentException exception = null;
         try {
-            new Searcher(text);
+            new Searcher1(text);
         } catch (Exception e) {
             exception = (IllegalArgumentException)e;
         }
@@ -123,7 +116,7 @@ public class SearcherTest {
     private void assertGetSearchTextIllegalArgumentEx(String text) {
         IllegalArgumentException exception = null;
         try {
-            new Searcher("test").search(text);
+            new Searcher1("test").search(text);
         } catch (Exception e) {
             exception = (IllegalArgumentException)e;
         }

@@ -3,11 +3,11 @@ package net.woniper.tdd.test.searcher.searcher1;
 /**
  * Created by woniper on 2016. 9. 19..
  */
-public class Searcher {
+public class Searcher1 {
 
     private String text;
 
-    public Searcher(String text) {
+    public Searcher1(String text) {
         if(!validText(text))
             throw new IllegalArgumentException();
 
