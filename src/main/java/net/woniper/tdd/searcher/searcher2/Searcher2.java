@@ -1,13 +1,13 @@
-package net.woniper.tdd.test.searcher.searcher2;
+package net.woniper.tdd.searcher.searcher2;
 
 /**
  * Created by woniper on 2016. 9. 23..
  */
-public class Searcher {
+public class Searcher2 {
 
     private String text;
 
-    public Searcher(String text) {
+    public Searcher2(String text) {
         if(isEmptyOrNull(text))
             throw new IllegalArgumentException();
 

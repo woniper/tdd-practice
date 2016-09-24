@@ -1,5 +1,7 @@
 package net.woniper.tdd.test.searcher.searcher2;
 
+import net.woniper.tdd.searcher.searcher2.Searcher2;
+
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.isA;
@@ -25,7 +27,7 @@ public class SearcherTest {
         IllegalArgumentException exception = null;
 
         try {
-            new Searcher(text);
+            new Searcher2(text);
         } catch (Exception e) {
             exception = (IllegalArgumentException) e;
         }
@@ -44,7 +46,7 @@ public class SearcherTest {
         IllegalArgumentException exception = null;
 
         try {
-            new Searcher("flex").search(keyword);
+            new Searcher2("flex").search(keyword);
         } catch (Exception e) {
             exception = (IllegalArgumentException) e;
         }
@@ -55,17 +57,17 @@ public class SearcherTest {
     // search method Text와 Keyword 길이 테스트 (text가 keyword에 길이보다 보다 크거나 같아야한다)
     @Test(expected = IllegalArgumentException.class)
     public void testTextAndKeywordLengthValidation() throws Exception {
-        new Searcher("1").search("12");
+        new Searcher2("1").search("12");
     }
 
     // search method text에 keyword 문자열이 포함되어있는지 테스트
     @Test
     public void testKeywordContainsInTextValidation() throws Exception {
         // given
-        Searcher searcher = new Searcher("no a flex");
+        Searcher2 searcher2 = new Searcher2("no a flex");
 
         // when
-        String expected = searcher.search("flexing");
+        String expected = searcher2.search("flexing");
 
         // then
         assertNull(expected);
@@ -96,10 +98,10 @@ public class SearcherTest {
 
     private void assertSearchResultIsNull(String text) {
         // given
-        Searcher searcher = new Searcher(text);
+        Searcher2 searcher2 = new Searcher2(text);
 
         // when
-        String expected = searcher.search("flex");
+        String expected = searcher2.search("flex");
 
         // then
         assertNull(expected);
@@ -135,10 +137,10 @@ public class SearcherTest {
 
     private void assertSearchResultIsNotNull(String text, String actual) {
         // given
-        Searcher searcher = new Searcher(text);
+        Searcher2 searcher2 = new Searcher2(text);
 
         // when
-        String expected = searcher.search("flex");
+        String expected = searcher2.search("flex");
 
         // then
         assertEquals(expected, actual);
