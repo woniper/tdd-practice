@@ -14,10 +14,8 @@ public class Calculator {
         if(isContainSpecialCharacter(text))
             throw new IllegalArgumentException();
 
-        if(!isContainSeperate(text))
-            throw new IllegalArgumentException();
-
-
+        if(!isContainSeperate(text) && isContainNumber(text))
+            return Integer.parseInt(text);
 
         int sum = 0;
         String[] numbers = text.split(",");
@@ -30,6 +28,10 @@ public class Calculator {
 
     private boolean isContainSeperate(String text) {
         return text.contains(",");
+    }
+
+    private boolean isContainNumber(String text) {
+        return text.matches("[0-9]");
     }
 
     private boolean isContainSpecialCharacter(String text) {

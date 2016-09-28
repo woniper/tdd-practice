@@ -24,10 +24,10 @@ public class Calculator1Test {
     public void testAddResult3() throws Exception {
         // given
         String text = "1,2";
-        int actual = 3;
+        int expected = 3;
 
         // when
-        int expected = calculator.add(text);
+        int actual = calculator.add(text);
 
         // then
         assertEquals(actual, expected);
@@ -37,10 +37,10 @@ public class Calculator1Test {
     public void testAddResult5() throws Exception {
         // given
         String text = "3,2";
-        int actual = 5;
+        int expected = 5;
 
         // when
-        int expected = calculator.add(text);
+        int actual = calculator.add(text);
 
         // then
         assertEquals(actual, expected);
@@ -50,8 +50,13 @@ public class Calculator1Test {
     public void testAddResult100() throws Exception {
         // given
         String text = "100";
+        int expected = 100;
 
+        // when
+        int actual = calculator.add(text);
 
+        // then
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -82,7 +87,9 @@ public class Calculator1Test {
     }
 
     // 빼기 테스트
+
     // 곱하기 테스트
+
     // 나누기 테스트
 
 }
