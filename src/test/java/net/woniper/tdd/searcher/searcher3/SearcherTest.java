@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.searcher.searcher3;
+package net.woniper.tdd.searcher.searcher3;
 
 import org.junit.Test;
 
