@@ -62,6 +62,45 @@ public class Calculator1Test {
     }
 
     @Test
+    public void testCarriageReturnAddResult5() throws Exception {
+        // given
+        String text = "1,1\n3";
+        int expected = 5;
+
+        // when
+        int actual = calculator.add(text);
+
+        // then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCarriageReturnAddResult15() throws Exception {
+        // given
+        String text = "2\n10\n3";
+        int expected = 15;
+
+        // when
+        int actual = calculator.add(text);
+
+        // then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCarriageReturnAddResult200() throws Exception {
+        // given
+        String text = "200";
+        int expected = 200;
+
+        // when
+        int actual = calculator.add(text);
+
+        // then
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testAddSpecialCharacterIllegalArgThrownEx() throws Exception {
         assertAddIllegalArgumentThrownEx("[1,2,3]", defaultCalculator);
         assertAddIllegalArgumentThrownEx("[1.2.3]", defaultCalculator);
@@ -76,7 +115,6 @@ public class Calculator1Test {
         assertAddIllegalArgumentThrownEx("1|2|3", calculator);
         assertAddIllegalArgumentThrownEx("1&2&3", calculator);
         assertAddIllegalArgumentThrownEx("(1\n2\n3)", calculator);
-        assertAddIllegalArgumentThrownEx("1\n2\n3", calculator);
     }
 
     @Test
@@ -98,11 +136,4 @@ public class Calculator1Test {
         }
         assertThat(exception, isA(IllegalArgumentException.class));
     }
-
-    // 빼기 테스트
-
-    // 곱하기 테스트
-
-    // 나누기 테스트
-
 }
