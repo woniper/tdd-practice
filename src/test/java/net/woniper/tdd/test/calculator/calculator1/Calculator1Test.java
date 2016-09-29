@@ -12,11 +12,13 @@ import static org.junit.Assert.assertThat;
  */
 public class Calculator1Test {
 
+    private Calculator defaultCalculator;
     private Calculator calculator;
 
     @Before
     public void setUp() throws Exception {
-        calculator = new Calculator();
+        defaultCalculator = new Calculator();
+        calculator = new Calculator(new String[]{",", "\n"});
     }
 
     // 더하기 테스트
@@ -27,7 +29,7 @@ public class Calculator1Test {
         int expected = 3;
 
         // when
-        int actual = calculator.add(text);
+        int actual = defaultCalculator.add(text);
 
         // then
         assertEquals(actual, expected);
@@ -40,7 +42,7 @@ public class Calculator1Test {
         int expected = 5;
 
         // when
-        int actual = calculator.add(text);
+        int actual = defaultCalculator.add(text);
 
         // then
         assertEquals(actual, expected);
@@ -53,7 +55,7 @@ public class Calculator1Test {
         int expected = 100;
 
         // when
-        int actual = calculator.add(text);
+        int actual = defaultCalculator.add(text);
 
         // then
         assertEquals(expected, actual);
@@ -61,21 +63,32 @@ public class Calculator1Test {
 
     @Test
     public void testAddSpecialCharacterIllegalArgThrownEx() throws Exception {
-        assertAddIllegalArgumentThrownEx("[1,2,3]");
-        assertAddIllegalArgumentThrownEx("[1.2.3]");
-        assertAddIllegalArgumentThrownEx("1.2.3");
-        assertAddIllegalArgumentThrownEx("1|2|3");
-        assertAddIllegalArgumentThrownEx("1&2&3");
-        assertAddIllegalArgumentThrownEx("(1,2,3)");
+        assertAddIllegalArgumentThrownEx("[1,2,3]", defaultCalculator);
+        assertAddIllegalArgumentThrownEx("[1.2.3]", defaultCalculator);
+        assertAddIllegalArgumentThrownEx("1.2.3", defaultCalculator);
+        assertAddIllegalArgumentThrownEx("1|2|3", defaultCalculator);
+        assertAddIllegalArgumentThrownEx("1&2&3", defaultCalculator);
+        assertAddIllegalArgumentThrownEx("(1,2,3)", defaultCalculator);
+
+        assertAddIllegalArgumentThrownEx("[1\n2\n3]", calculator);
+        assertAddIllegalArgumentThrownEx("[1.2.3]", calculator);
+        assertAddIllegalArgumentThrownEx("1.2.3", calculator);
+        assertAddIllegalArgumentThrownEx("1|2|3", calculator);
+        assertAddIllegalArgumentThrownEx("1&2&3", calculator);
+        assertAddIllegalArgumentThrownEx("(1\n2\n3)", calculator);
+        assertAddIllegalArgumentThrownEx("1\n2\n3", calculator);
     }
 
     @Test
     public void testAddIllegalArgThrownEx() throws Exception {
-        assertAddIllegalArgumentThrownEx("");
-        assertAddIllegalArgumentThrownEx(null);
+        assertAddIllegalArgumentThrownEx("", defaultCalculator);
+        assertAddIllegalArgumentThrownEx(null, defaultCalculator);
+
+        assertAddIllegalArgumentThrownEx("", calculator);
+        assertAddIllegalArgumentThrownEx(null, calculator);
     }
 
-    private void assertAddIllegalArgumentThrownEx(String text) {
+    private void assertAddIllegalArgumentThrownEx(String text, Calculator calculator) {
         IllegalArgumentException exception = null;
 
         try {
