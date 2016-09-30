@@ -16,6 +16,18 @@ public class Calculator {
         this.seperates = seperates == null ? DEFAULT_SEPERATE : seperates;
     }
 
+    /**
+     * add 메소드 자체는 깔끔하게 잘 구현한거 같다.
+     * 하지만 아래 private 메소드는 좀 더 깔끔하게 작성하는게 가능할거 같다.
+     * 크게
+     * - empty String, null 체크
+     * - parameter validation (seperator가 정상적으로 포함되어 있는지, 숫자가 넘어 정상적으로 넘어왔는지)
+     *  - seperate : ,와 \n
+     *  - 정상 : 1,2\n3 = 6 과 같다
+     * - 모두 숫자이면 그대로 숫자만 던진다. 계산할 필요가 없기 때문
+     * @param text
+     * @return
+     */
     public int add(String text) {
         if (isEmptyOrNull(text))
             throw new IllegalArgumentException();

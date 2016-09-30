@@ -102,6 +102,11 @@ public class CalculatorTest1 {
         assertEquals(expected, actual);
     }
 
+    /**
+     * 검증(assert) 메소드는 추상화 시켜 아래와 같이 쓰는게 좋은거 같다
+     * exception 처리 뿐만 아니라 모든 test 코드도 마찬가지로..
+     * @throws Exception
+     */
     @Test
     public void testAddSpecialCharacterIllegalArgThrownEx() throws Exception {
         assertAddIllegalArgumentThrownEx("[1,2,3]", defaultCalculator);
