@@ -1,5 +1,7 @@
 package net.woniper.tdd.test.calculator.calculator1;
 
+import net.woniper.tdd.calculator.calculator1.Calculator;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +12,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by woniper on 2016. 9. 28..
  */
-public class Calculator1Test {
+public class CalculatorTest1 {
 
     private Calculator defaultCalculator;
     private Calculator calculator;
