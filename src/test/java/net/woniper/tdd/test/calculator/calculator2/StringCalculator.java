@@ -19,6 +19,15 @@ public class StringCalculator {
         this.seperators = seperators;
     }
 
+    public StringCalculator() {
+        this(null);
+    }
+
+    /**
+     * 생성자로 주입된 seperators에 숫자가 포함되어 있는지 체크
+     * @param seperators
+     * @return
+     */
     private boolean isSeperatorsContainsNumber(char[] seperators) {
         if(seperators != null) {
             if(0 == seperators.length) {
@@ -35,10 +44,11 @@ public class StringCalculator {
         return false;
     }
 
-    public StringCalculator() {
-        this(null);
-    }
-
+    /**
+     * 유효한 seperator 인지 체크
+     * @param seperator
+     * @return
+     */
     public boolean isContainsSeperator(char seperator) {
         for (char c : seperators) {
             if(c == seperator) {
@@ -48,10 +58,11 @@ public class StringCalculator {
         return false;
     }
 
-    private boolean isNotContainsSeperator(char seperator) {
-        return !isContainsSeperator(seperator);
-    }
-
+    /**
+     * 문자열 합계
+     * @param text
+     * @return
+     */
     public int add(String text) {
         if(isEmptyOrNull(text))
             throw new IllegalArgumentException();
@@ -65,6 +76,20 @@ public class StringCalculator {
         return sum(text);
     }
 
+    /**
+     * @see this.isContainsSeperator
+     * @param seperator
+     * @return
+     */
+    private boolean isNotContainsSeperator(char seperator) {
+        return !isContainsSeperator(seperator);
+    }
+
+    /**
+     * 합계를 구하기 위한(add method) text에 유효한 seperator만 포함되어 있는지 체크
+     * @param text
+     * @return
+     */
     private boolean isTextContainsSeperator(String text) {
         char[] chars = getChars(text);
         for (char c : chars) {
@@ -75,6 +100,11 @@ public class StringCalculator {
         return true;
     }
 
+    /**
+     * 합계를 구하기 위한(add method) text가 seperator없이 모두 숫자인지 체크
+     * @param text
+     * @return
+     */
     private boolean isAllNumber(String text) {
         char[] chars = getChars(text);
         for (char c : chars) {
@@ -85,10 +115,20 @@ public class StringCalculator {
         return true;
     }
 
+    /**
+     * text를 char array로 변환
+     * @param text
+     * @return
+     */
     private char[] getChars(String text) {
         return text.toCharArray();
     }
 
+    /**
+     * 합계
+     * @param text
+     * @return
+     */
     private int sum(String text) {
         int sum = 0;
         String[] numbers = text.split(getSplitRegex(text));
@@ -98,6 +138,11 @@ public class StringCalculator {
         return sum;
     }
 
+    /**
+     * text를 split으로 문자열을 구분하기 위해 regex 문자열 생성
+     * @param text
+     * @return
+     */
     private String getSplitRegex(String text) {
         StringBuilder splits = new StringBuilder();
         char[] chars = getChars(text);
@@ -123,6 +168,11 @@ public class StringCalculator {
         return text == null || text.isEmpty();
     }
 
+    /**
+     * 문자가 숫자인이 체크
+     * @param text
+     * @return
+     */
     private boolean isNumber(char text) {
         return String.valueOf(text).matches("[0-9]");
     }
