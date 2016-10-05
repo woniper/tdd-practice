@@ -5,6 +5,9 @@ package net.woniper.tdd.test.calculator.calculator2;
  */
 public class StringCalculator {
 
+    /**
+     * seperator 객체를 만들어 객체로 관리
+     */
     private char[] seperators;
     private static final char[] DEFAULT_SEPERATORS = {','};
 
@@ -58,6 +61,7 @@ public class StringCalculator {
         return false;
     }
 
+    // parameter인 text를 관리하고 validation할 수 있는 Text 객체가 필요해 보인다.
     /**
      * 문자열 합계
      * @param text
@@ -67,9 +71,11 @@ public class StringCalculator {
         if(isEmptyOrNull(text))
             throw new IllegalArgumentException();
 
+        // seperator(구분자) 객체 필요
         if(!isTextContainsSeperator(text))
             throw new IllegalArgumentException();
 
+        // Number 객체 필요
         if(isAllNumber(text))
             return Integer.parseInt(text);
 
