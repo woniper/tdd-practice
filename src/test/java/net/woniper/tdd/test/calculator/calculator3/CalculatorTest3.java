@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
@@ -17,11 +16,11 @@ import static org.junit.Assert.assertTrue;
 public class CalculatorTest3 {
 
     private String defaultText = "1,2,3";
-    private Text text;
+    private StringCalculator stringCalculator;
 
     @Before
     public void setUp() throws Exception {
-        this.text = new Text(defaultText);
+        this.stringCalculator = new StringCalculator(defaultText);
     }
 
     // Text
@@ -35,7 +34,7 @@ public class CalculatorTest3 {
     private void assertTextConstructorValidation(String text) {
         IllegalArgumentException exception = null;
         try {
-            new Text(text);
+            new StringCalculator(text);
         } catch(Exception e) {
             exception = (IllegalArgumentException)e;
         }
@@ -43,14 +42,10 @@ public class CalculatorTest3 {
     }
 
     // get Number Object
-
     @Test
     public void testTextGetDefaultNumber() throws Exception {
-        // when
-        Number number = text.getNumber();
+        Number number = stringCalculator.getNumber();
         List<Integer> numbers = number.getNumbers();
-
-        // then
         assertThat(numbers.get(0), is(1));
         assertThat(numbers.get(1), is(2));
         assertThat(numbers.get(2), is(3));
@@ -60,10 +55,10 @@ public class CalculatorTest3 {
     public void testTextGetNumber() throws Exception {
         // given
         String str = "2,3,4";
-        Text text = new Text(str);
+        StringCalculator stringCalculator = new StringCalculator(str);
 
         // when
-        Number number = text.getNumber();
+        Number number = stringCalculator.getNumber();
         List<Integer> numbers = number.getNumbers();
 
         // then
@@ -72,22 +67,44 @@ public class CalculatorTest3 {
         assertThat(numbers.get(2), is(4));
     }
 
-    // get Seperator Object
-
     @Test
-    public void testTextGetDefaultSeperator() throws Exception {
+    public void testTextAddSeperatorAndGetNumber() throws Exception {
         // given
-        Seperator seperator = text.getSeperator();
+        String str = "2,3|5";
+        StringCalculator stringCalculator = new StringCalculator(str);
+        stringCalculator.addSeperator('|');
 
         // when
-        Set<Character> seperators = seperator.getSeperators();
+        Number number = stringCalculator.getNumber();
+        List<Integer> numbers = number.getNumbers();
 
         // then
-        assertTrue(seperators.contains(','));
+        assertThat(numbers.get(0), is(2));
+        assertThat(numbers.get(1), is(3));
+        assertThat(numbers.get(2), is(5));
     }
 
+    // get Seperator Object
+    @Test
+    public void testTextGetDefaultSeperator() throws Exception {
+        assertTrue(stringCalculator.containsSeperator(','));
+    }
 
-    // Number
+    @Test
+    public void testSetSeperatorAndContainsSeperator() throws Exception {
+        // given
+        StringCalculator stringCalculator = new StringCalculator("1,2|3");
+        stringCalculator.addSeperator('|');
+
+        // when
+        boolean condition1 = stringCalculator.containsSeperator(',');
+        boolean condition2 = stringCalculator.containsSeperator('|');
+
+        // then
+        assertTrue(condition1);
+        assertTrue(condition2);
+    }
+
     // Text 객체를 받아 validation
     // 숫자만 포함 되어 있는지 체크
     // 숫자 배열 반환

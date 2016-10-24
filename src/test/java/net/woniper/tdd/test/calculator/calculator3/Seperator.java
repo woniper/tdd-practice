@@ -10,6 +10,12 @@ public class Seperator {
 
     private Set<Character> seperators = new HashSet<>();
 
+    private static final char DEFAULT_SEPERATOR = ',';
+
+    public Seperator() {
+        this.seperators.add(DEFAULT_SEPERATOR);
+    }
+
     public Set<Character> getSeperators() {
         return seperators;
     }
