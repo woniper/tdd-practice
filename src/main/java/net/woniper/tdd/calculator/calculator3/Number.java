@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.calculator.calculator3;
+package net.woniper.tdd.calculator.calculator3;
 
 import java.util.ArrayList;
 import java.util.List;

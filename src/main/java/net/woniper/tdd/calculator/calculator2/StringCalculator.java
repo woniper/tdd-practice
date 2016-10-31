@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.calculator.calculator2;
+package net.woniper.tdd.calculator.calculator2;
 
 /**
  * Created by woniper on 2016. 10. 2..

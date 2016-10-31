@@ -1,4 +1,4 @@
-package net.woniper.tdd.test.calculator.calculator3;
+package net.woniper.tdd.calculator.calculator3;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,5 +1,8 @@
 package net.woniper.tdd.test.calculator.calculator3;
 
+import net.woniper.tdd.calculator.calculator3.Number;
+import net.woniper.tdd.calculator.calculator3.StringCalculator;
+
 import org.junit.Before;
 import org.junit.Test;
 
