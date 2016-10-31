@@ -41,4 +41,12 @@ public class Seperator {
 
         return regex.toString();
     }
+
+    public boolean contains(char seperator) {
+        return getSeperators().contains(seperator);
+    }
+
+    public boolean add(char seperator) {
+        return getSeperators().add(seperator);
+    }
 }

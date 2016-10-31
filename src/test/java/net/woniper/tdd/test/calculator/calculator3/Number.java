@@ -17,4 +17,12 @@ public class Number {
     public void addNumber(int number) {
         numbers.add(number);
     }
+
+    public int sum() {
+        return getNumbers().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public int multiply() {
+        return getNumbers().stream().mapToInt(Integer::intValue).reduce((left, right) -> left * right).getAsInt();
+    }
 }

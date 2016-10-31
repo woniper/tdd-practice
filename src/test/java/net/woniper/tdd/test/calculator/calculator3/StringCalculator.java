@@ -29,7 +29,7 @@ public class StringCalculator {
     }
 
     private Number createNumber() {
-        Number number = new Number();
+        number = new Number();
         String[] numbers = getNumberArray();
         for (String num : numbers) {
             number.addNumber(Integer.parseInt(num));
@@ -55,10 +55,18 @@ public class StringCalculator {
     }
 
     public boolean containsSeperator(char seperator) {
-        return getSeperator().getSeperators().contains(seperator);
+        return getSeperator().contains(seperator);
     }
 
     public void addSeperator(char seperator) {
-        getSeperator().getSeperators().add(seperator);
+        getSeperator().add(seperator);
+    }
+
+    public int sum() {
+        return getNumber().sum();
+    }
+
+    public int multiply() {
+        return getNumber().multiply();
     }
 }

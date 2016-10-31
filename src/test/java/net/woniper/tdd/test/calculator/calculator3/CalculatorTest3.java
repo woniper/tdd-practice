@@ -105,17 +105,58 @@ public class CalculatorTest3 {
         assertTrue(condition2);
     }
 
-    // Text 객체를 받아 validation
     // 숫자만 포함 되어 있는지 체크
-    // 숫자 배열 반환
+    @Test
+    public void testOnlyNumberSum() throws Exception {
+        // given
+        StringCalculator stringCalculator = new StringCalculator("100");
 
-    // Seperator
-    // Text 객체를 받아 validation
-    // 유효한 구분자 체크
-    // 구분자 배열 반환
+        // when
+        int sum = stringCalculator.sum();
 
-    // StringCalculator
-    // Text 객체를 만들어 validation
-    // 합계
+        // then
+        assertThat(100, is(sum));
+    }
 
+    @Test
+    public void testSum() throws Exception {
+        // when
+        int sum = this.stringCalculator.sum();
+
+        // then
+        assertThat(6, is(sum));
+    }
+
+    @Test
+    public void testOnlyNumberMultiply() throws Exception {
+        // given
+        StringCalculator stringCalculator = new StringCalculator("200");
+
+        // when
+        int multiply = stringCalculator.multiply();
+
+        // then
+        assertThat(200, is(multiply));
+    }
+
+    @Test
+    public void testDefaultMultiply() throws Exception {
+        // when
+        int multiply = this.stringCalculator.multiply();
+
+        // then
+        assertThat(6, is(multiply));
+    }
+
+    @Test
+    public void testMultiply() throws Exception {
+        // given
+        StringCalculator stringCalculator = new StringCalculator("1,4,10");
+
+        // when
+        int multiply = stringCalculator.multiply();
+
+        // then
+        assertThat(40, is(multiply));
+    }
 }
