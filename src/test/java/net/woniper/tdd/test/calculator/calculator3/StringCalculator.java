@@ -1,7 +1,5 @@
 package net.woniper.tdd.test.calculator.calculator3;
 
-import java.util.Set;
-
 /**
  * Created by woniper on 2016. 10. 5..
  */
@@ -40,29 +38,7 @@ public class StringCalculator {
     }
 
     private String[] getNumberArray() {
-        String regex = getSeperatorRegex();
-        return text.split(regex);
-    }
-
-    private String getSeperatorRegex() {
-        StringBuilder seperatorRegex = new StringBuilder();
-        Set<Character> seperators = getSeperator().getSeperators();
-
-        for (Character seperator : seperators) {
-            String addSeperator = null;
-            if(seperator == '|') {
-                addSeperator = "\\|";
-            } else {
-                addSeperator = String.valueOf(seperator);
-            }
-
-            if(seperatorRegex.length() == 0) {
-                seperatorRegex.append(addSeperator);
-            } else {
-                seperatorRegex.append("|").append(addSeperator);
-            }
-        }
-        return seperatorRegex.toString();
+        return text.split(getSeperator().getRegex(this));
     }
 
     public Seperator getSeperator() {

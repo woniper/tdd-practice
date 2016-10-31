@@ -19,4 +19,26 @@ public class Seperator {
     public Set<Character> getSeperators() {
         return seperators;
     }
+
+    public String getRegex(StringCalculator calculator) {
+        StringBuilder regex = new StringBuilder();
+
+        for (Character c : getSeperators()) {
+            String addRegexText = null;
+
+            if(c == '|') {
+                addRegexText = "\\|";
+            } else {
+                addRegexText = String.valueOf(c);
+            }
+
+            if(regex.length() == 0) {
+                regex.append(addRegexText);
+            } else {
+                regex.append("|").append(addRegexText);
+            }
+        }
+
+        return regex.toString();
+    }
 }
