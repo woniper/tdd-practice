@@ -1,14 +1,19 @@
 package net.woniper.tdd.toby.chapter1;
 
+import net.woniper.tdd.toby.chapter1.connection.NConnectionMaker;
+
 import java.sql.SQLException;
 
 /**
  * Created by woniper on 2016. 12. 26..
  */
-public class Test {
+public class UserDaoTest {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao();
+        /**
+         * 생성자를 통해 NConnectionMaker 주입
+         */
+        UserDao dao = new UserDao(new NConnectionMaker());
 
         User user = new User();
         user.setId("woniper");
