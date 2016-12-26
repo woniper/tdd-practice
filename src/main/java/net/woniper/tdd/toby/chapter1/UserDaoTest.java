@@ -1,6 +1,7 @@
 package net.woniper.tdd.toby.chapter1;
 
-import net.woniper.tdd.toby.chapter1.connection.NConnectionMaker;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
@@ -13,7 +14,8 @@ public class UserDaoTest {
         /**
          * 생성자를 통해 NConnectionMaker 주입
          */
-        UserDao dao = new UserDao(new NConnectionMaker());
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        UserDao dao = context.getBean(UserDao.class);
 
         User user = new User();
         user.setId("woniper");
