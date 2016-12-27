@@ -1,5 +1,6 @@
 package net.woniper.tdd.toby.chapter2;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -11,14 +12,31 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created by woniper on 2016. 12. 27..
+ * junit 실행 순서
+ * 1. 테스트 클래스에서 @Test가 붙은 public이고 void형이며 파라미터가 없는 테스트 메소드를 모두 찾는다.
+ * 2. 테스트 클래스의 오브젝트를 하나 만든다.
+ * 3. @Before가 붙은 메소드가 있으면 실행한다.
+ * 4. @Test가 붙은 메소드를 하나 호출하고 테스트 결과를 저장해둔다.
+ * 5. @After가 붙은 메소드가 있으면 실행한다.
+ * 6. 나머지 테스트 메소드에 대해 2~5번을 반복한다. (테스트 마다 객체를 생성)
+ * 7. 모든 테스트의 결과를 종합해서 돌려준다.
  */
 public class UserDaoTest {
+
+    private UserDao dao;
+
+    /**
+     * fixture : 테스트를 수행하는데 필요한 정보나 오브젝트를 픽스처라고 한다.
+     * @throws Exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        this.dao = context.getBean(UserDao.class);
+    }
+
     @Test
     public void addAndGet() throws SQLException, ClassNotFoundException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao = context.getBean(UserDao.class);
         User user1 = new User("woniper", "kw", "1234");
         User user2 = new User("01b", "yi", "1234");
 
@@ -41,9 +59,6 @@ public class UserDaoTest {
 
     @Test(expected = EmptyResultDataAccessException.class)
     public void getUserFailure() throws Exception {
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao = context.getBean(UserDao.class);
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
 
