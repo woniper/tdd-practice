@@ -2,9 +2,12 @@ package net.woniper.tdd.toby.chapter2;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.SQLException;
 
@@ -21,8 +24,11 @@ import static org.junit.Assert.assertThat;
  * 6. 나머지 테스트 메소드에 대해 2~5번을 반복한다. (테스트 마다 객체를 생성)
  * 7. 모든 테스트의 결과를 종합해서 돌려준다.
  */
+@RunWith(SpringJUnit4ClassRunner.class) // junit 프레임워크의 테스트 방법을 확장하는 경우 사용
+@ContextConfiguration(classes = DaoFactory.class)
 public class UserDaoTest {
 
+    @Autowired private ApplicationContext context;
     private UserDao dao;
 
     /**
@@ -31,7 +37,6 @@ public class UserDaoTest {
      */
     @Before
     public void setUp() throws Exception {
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
         this.dao = context.getBean(UserDao.class);
     }
 
