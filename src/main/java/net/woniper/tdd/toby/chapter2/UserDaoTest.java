@@ -6,9 +6,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,6 +29,7 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(SpringJUnit4ClassRunner.class) // junit 프레임워크의 테스트 방법을 확장하는 경우 사용
 @ContextConfiguration(classes = DaoFactory.class)
+@DirtiesContext // 테스트에서 DI 설정한다는 것을 테스트 컨텍스트 프레임워크에게 알린다.
 public class UserDaoTest {
 
     @Autowired private ApplicationContext context;
@@ -38,6 +42,10 @@ public class UserDaoTest {
     @Before
     public void setUp() throws Exception {
         this.dao = context.getBean(UserDao.class);
+
+        // 테스트 코드에서 dao에 SingleConnectionDataSource를 직접 DI 하기 때문에 @DirtiesContext 가 필요하다.
+        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/test", "root", "q1w2e3", true);
+        dao.setDataSource(dataSource);
     }
 
     @Test
