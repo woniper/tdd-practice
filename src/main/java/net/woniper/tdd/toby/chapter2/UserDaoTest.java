@@ -18,7 +18,8 @@ public class UserDaoTest {
         ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
         UserDao dao = context.getBean(UserDao.class);
 
-
+        dao.deleteAll();
+        assertThat(dao.getCount(), is(0));
 
         User user = new User();
         user.setId("kyung-won");
