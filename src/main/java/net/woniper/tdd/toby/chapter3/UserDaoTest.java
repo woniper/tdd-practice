@@ -7,6 +7,7 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -25,24 +26,52 @@ public class UserDaoTest {
 
     private UserDao dao;
 
+    private User user1;
+    private User user2;
+
     /**
      * fixture : 테스트를 수행하는데 필요한 정보나 오브젝트를 픽스처라고 한다.
      * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
-        dao = new UserDao();
+        this.dao = new UserDao();
 
         // 테스트 코드에서 dao에 SingleConnectionDataSource를 직접 DI 하기 때문에 @DirtiesContext 가 필요하다.
         DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/test", "root", "q1w2e3", true);
-        dao.setDataSource(dataSource);
+        this.dao.setDataSource(dataSource);
+
+        this.user1 = new User("woniper", "kw", "1234");
+        this.user2 = new User("01b", "yi", "1234");
+    }
+
+    @Test
+    public void getAll() throws Exception {
+        dao.deleteAll();
+
+        List<User> users0 = dao.getAll();
+        assertThat(users0.size(), is(0));
+
+        dao.add(user1);
+        List<User> users1 = dao.getAll();
+        assertThat(users1.size(), is(1));
+        checkSameUser(user1, users1.get(0));
+
+        dao.add(user2);
+        List<User> users2 = dao.getAll();
+        assertThat(users2.size(), is(2));
+        checkSameUser(user2, users2.get(0));
+        checkSameUser(user1, users2.get(1));
+    }
+
+    private void checkSameUser(User user1, User user2) {
+        assertThat(user1.getId(), is(user2.getId()));
+        assertThat(user1.getName(), is(user2.getName()));
+        assertThat(user1.getPassword(), is(user2.getPassword()));
     }
 
     @Test
     public void addAndGet() throws SQLException, ClassNotFoundException {
-        User user1 = new User("woniper", "kw", "1234");
-        User user2 = new User("01b", "yi", "1234");
-
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
 

@@ -1,113 +1,75 @@
 package net.woniper.tdd.toby.chapter3;
 
-import net.woniper.tdd.toby.chapter3.statement.StatementStrategy;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by woniper on 2016. 12. 26..
  */
 public class UserDao {
 
-    private DataSource dataSource;
-
     /**
-     * UserDao와 JdbcContext는 긴밀하게 의존된 객체다.
-     * 때문에 jdbcContext도 DataSource를 의존하기 때문에 DataSource 의존 시 생성한다.
-     * 즉, UserDao가 JdbcContext를 생성 주입한다.
+     * Spring JdbcTemplate
+     * Template/Callback pattern
      */
-    private JdbcContext jdbcContext;
+    private JdbcTemplate jdbcTemplate;
+    private RowMapper<User> rowMapper = new RowMapper<User>() {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getString("id"));
+            user.setName(rs.getString("name"));
+            user.setPassword(rs.getString("password"));
+
+            return user;
+        }
+    };
 
     public void setDataSource(DataSource dataSource) {
-        this.jdbcContext = new JdbcContext();
-        this.jdbcContext.setDataSource(dataSource);     // 의존 오브젝트 주입(DI)
-        this.dataSource = dataSource;
+        this.jdbcTemplate = new JdbcTemplate();
+        this.jdbcTemplate.setDataSource(dataSource);
     }
 
     public void add(final User user) throws ClassNotFoundException, SQLException {
-        this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
+        this.jdbcTemplate.update("insert into users(id, name, password) values(?, ?, ?)",
+                user.getId(), user.getName(), user.getPassword());
+    }
+
+    public User get(final String id) throws ClassNotFoundException, SQLException {
+        return this.jdbcTemplate.queryForObject("select * from users where id= ?",
+                new Object[] {id}, this.rowMapper);
+    }
+
+    public void deleteAll() throws SQLException {
+        this.jdbcTemplate.update("delete from users");
+    }
+
+    public int getCount() throws SQLException {
+        return this.jdbcTemplate.query(new PreparedStatementCreator() {
             @Override
-            public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-                PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
-                ps.setString(1, user.getId());
-                ps.setString(2, user.getName());
-                ps.setString(3, user.getPassword());
-                return ps;
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                return connection.prepareStatement("select count(*) from users");
+            }
+        }, new ResultSetExtractor<Integer>() {
+            @Override
+            public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                resultSet.next();
+                return resultSet.getInt(1);
             }
         });
     }
 
-    public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection c = dataSource.getConnection();
-
-        PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
-        ps.setString(1, id);
-
-        ResultSet rs = ps.executeQuery();
-
-        User user = null;
-
-        if(rs.next()) {
-            user = new User();
-            user.setId(rs.getString("id"));
-            user.setName(rs.getString("name"));
-            user.setPassword(rs.getString("password"));
-        }
-
-        rs.close();
-        ps.close();
-        c.close();
-
-        if(user == null)
-            throw new EmptyResultDataAccessException(1);
-
-        return user;
+    public List<User> getAll() {
+        return this.jdbcTemplate.query("select * from users order by id", this.rowMapper);
     }
-
-    public void deleteAll() throws SQLException {
-        this.jdbcContext.executeSql("delete from users");
-    }
-
-    public int getCount() throws SQLException {
-        Connection c = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            c = dataSource.getConnection();
-            ps = c.prepareStatement("select count(*) from users");
-            rs = ps.executeQuery();
-            rs.next();
-            return rs.getInt(1);
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                }
-            }
-
-            if(ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                }
-            }
-
-            if(c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
-    }
-
 }
