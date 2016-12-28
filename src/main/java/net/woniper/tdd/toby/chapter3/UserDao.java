@@ -16,12 +16,21 @@ public class UserDao {
 
     private DataSource dataSource;
 
+    /**
+     * UserDao와 JdbcContext는 긴밀하게 의존된 객체다.
+     * 때문에 jdbcContext도 DataSource를 의존하기 때문에 DataSource 의존 시 생성한다.
+     * 즉, UserDao가 JdbcContext를 생성 주입한다.
+     */
+    private JdbcContext jdbcContext;
+
     public void setDataSource(DataSource dataSource) {
+        this.jdbcContext = new JdbcContext();
+        this.jdbcContext.setDataSource(dataSource);     // 의존 오브젝트 주입(DI)
         this.dataSource = dataSource;
     }
 
     public void add(final User user) throws ClassNotFoundException, SQLException {
-        jdbcContextWithStatementStratege(new StatementStrategy() {
+        this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
             @Override
             public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
                 PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
@@ -61,7 +70,7 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        jdbcContextWithStatementStratege(new StatementStrategy() {
+        this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
             @Override
             public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
                 return c.prepareStatement("delete from users");
@@ -103,23 +112,6 @@ public class UserDao {
                 } catch (SQLException e) {
                 }
             }
-        }
-    }
-
-    public void jdbcContextWithStatementStratege(StatementStrategy stmt) throws SQLException {
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try {
-            c = dataSource.getConnection();
-            ps = stmt.makePreparedStatement(c);
-
-            ps.executeUpdate();
-        } catch(SQLException e) {
-            throw e;
-        } finally {
-            if(ps != null) try { ps.close(); } catch (SQLException e) { throw e; }
-            if(c != null) try { c.close(); } catch (SQLException e) { throw e; }
         }
     }
 
