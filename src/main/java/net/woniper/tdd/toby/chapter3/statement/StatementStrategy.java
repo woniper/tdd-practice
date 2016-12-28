@@ -1,4 +1,4 @@
-package net.woniper.tdd.toby.chapter3;
+package net.woniper.tdd.toby.chapter3.statement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
