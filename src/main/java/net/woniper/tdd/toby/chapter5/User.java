@@ -87,4 +87,8 @@ public class User {
         this.recommend = recommend;
         return this;
     }
+
+    public String getEmail() {
+        return getId() + "@naver.com";
+    }
 }

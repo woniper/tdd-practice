@@ -1,16 +1,16 @@
 package net.woniper.tdd.toby.chapter5.test;
 
-import net.woniper.tdd.toby.chapter5.DaoFactory;
-import net.woniper.tdd.toby.chapter5.Level;
-import net.woniper.tdd.toby.chapter5.TestUserServiceException;
-import net.woniper.tdd.toby.chapter5.User;
+import net.woniper.tdd.toby.chapter5.*;
 import net.woniper.tdd.toby.chapter5.dao.UserDao;
+import net.woniper.tdd.toby.chapter5.mail.DummyMailSender;
+import net.woniper.tdd.toby.chapter5.mail.MockMailSender;
 import net.woniper.tdd.toby.chapter5.service.TestUserService;
 import net.woniper.tdd.toby.chapter5.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -30,6 +30,7 @@ import static org.springframework.test.util.AssertionErrors.fail;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DaoFactory.class)
+@DirtiesContext
 public class UserServiceTest {
 
     @Autowired private UserService userService;
@@ -54,6 +55,7 @@ public class UserServiceTest {
         UserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(userDao);
         testUserService.setTransactionManager(transactionManager);
+        testUserService.setMailSender(new DummyMailSender());
 
         userDao.deleteAll();
         for (User user : users) {
@@ -94,6 +96,9 @@ public class UserServiceTest {
             userDao.add(user);
         }
 
+        MockMailSender mockMailSender = new MockMailSender();
+        userService.setMailSender(mockMailSender);
+
         userService.upgradeLevels();
 
         checkLevelUpgrade(users.get(0), false);
@@ -101,6 +106,11 @@ public class UserServiceTest {
         checkLevelUpgrade(users.get(2), false);
         checkLevelUpgrade(users.get(3), true);
         checkLevelUpgrade(users.get(4), false);
+
+        List<String> requests = mockMailSender.getRequests();
+        assertThat(requests.size(), is(2));
+        assertThat(requests.get(0), is(users.get(1).getEmail()));
+        assertThat(requests.get(1), is(users.get(3).getEmail()));
     }
 
     @Test
