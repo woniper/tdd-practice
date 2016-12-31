@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.woniper.tdd.toby.chapter5.service.UserService.MIN_LOGCOUNT_FOR_SILBER;
+import static net.woniper.tdd.toby.chapter5.service.UserService.MIN_RECOMMEND_FOR_GOLD;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -34,11 +36,11 @@ public class UserServiceTest {
     @Before
     public void setUp() throws Exception {
         users = Arrays.asList(
-                new User("user1", "name1", "1234", Level.BASIC, 49, 0),
-                new User("user2", "name2", "1234", Level.BASIC, 50, 0),
-                new User("user3", "name3", "1234", Level.SILVER, 60, 29),
-                new User("user4", "name4", "1234", Level.SILVER, 60, 30),
-                new User("user5", "name5", "1234", Level.GOLD, 100, 100)
+                new User("user1", "name1", "1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILBER-1, 0),
+                new User("user2", "name2", "1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILBER, 0),
+                new User("user3", "name3", "1234", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD-1),
+                new User("user4", "name4", "1234", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
+                new User("user5", "name5", "1234", Level.GOLD, 100, Integer.MAX_VALUE)
         );
     }
 
@@ -69,11 +71,11 @@ public class UserServiceTest {
 
         userService.upgradeLevels();
 
-        checkLevel(users.get(0), Level.BASIC);
-        checkLevel(users.get(1), Level.SILVER);
-        checkLevel(users.get(2), Level.SILVER);
-        checkLevel(users.get(3), Level.GOLD);
-        checkLevel(users.get(4), Level.GOLD);
+        checkLevelUpgrade(users.get(0), false);
+        checkLevelUpgrade(users.get(1), true);
+        checkLevelUpgrade(users.get(2), false);
+        checkLevelUpgrade(users.get(3), true);
+        checkLevelUpgrade(users.get(4), false);
     }
 
     @Test
@@ -81,8 +83,12 @@ public class UserServiceTest {
         assertThat(this.userService, is(notNullValue()));
     }
 
-    private void checkLevel(User user, Level exepectedLevel) {
+    private void checkLevelUpgrade(User user, boolean upgraded) {
         User userUpdate = userDao.get(user.getId());
-        assertThat(userUpdate.getLevel(), is(exepectedLevel));
+        if(upgraded) {
+            assertThat(userUpdate.getLevel(), is(user.getLevel().nextLevel()));
+        } else {
+            assertThat(userUpdate.getLevel(), is(user.getLevel()));
+        }
     }
 }

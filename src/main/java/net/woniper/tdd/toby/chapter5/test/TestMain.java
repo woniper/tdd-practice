@@ -11,6 +11,7 @@ public class TestMain {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         JUnitCore.main("net.woniper.tdd.toby.chapter5.test.UserDaoTest",
-                "net.woniper.tdd.toby.chapter5.test.UserServiceTest");
+                "net.woniper.tdd.toby.chapter5.test.UserServiceTest",
+                "net.woniper.tdd.toby.chapter5.test.UserTest");
     }
 }
