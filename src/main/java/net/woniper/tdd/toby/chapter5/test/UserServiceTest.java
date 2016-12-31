@@ -2,8 +2,10 @@ package net.woniper.tdd.toby.chapter5.test;
 
 import net.woniper.tdd.toby.chapter5.DaoFactory;
 import net.woniper.tdd.toby.chapter5.Level;
+import net.woniper.tdd.toby.chapter5.TestUserServiceException;
 import net.woniper.tdd.toby.chapter5.User;
 import net.woniper.tdd.toby.chapter5.dao.UserDao;
+import net.woniper.tdd.toby.chapter5.service.TestUserService;
 import net.woniper.tdd.toby.chapter5.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +23,7 @@ import static net.woniper.tdd.toby.chapter5.service.UserService.MIN_RECOMMEND_FO
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.springframework.test.util.AssertionErrors.fail;
 
 /**
  * Created by woniper on 2016. 12. 31..
@@ -30,6 +34,7 @@ public class UserServiceTest {
 
     @Autowired private UserService userService;
     @Autowired private UserDao userDao;
+    @Autowired private PlatformTransactionManager transactionManager;
 
     List<User> users;
 
@@ -42,6 +47,26 @@ public class UserServiceTest {
                 new User("user4", "name4", "1234", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
                 new User("user5", "name5", "1234", Level.GOLD, 100, Integer.MAX_VALUE)
         );
+    }
+
+    @Test
+    public void upgradeAllOrNothing() throws Exception {
+        UserService testUserService = new TestUserService(users.get(3).getId());
+        testUserService.setUserDao(userDao);
+        testUserService.setTransactionManager(transactionManager);
+
+        userDao.deleteAll();
+        for (User user : users) {
+            userDao.add(user);
+        }
+
+        try {
+            testUserService.upgradeLevels();
+            fail("TestUserServiceException expected");
+        } catch(TestUserServiceException e) {
+        }
+
+        checkLevelUpgrade(users.get(1), false);
     }
 
     @Test

@@ -5,7 +5,9 @@ import net.woniper.tdd.toby.chapter5.dao.UserDaoJdbc;
 import net.woniper.tdd.toby.chapter5.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -26,7 +28,13 @@ public class DaoFactory {
     public UserService userService() {
         UserService userService = new UserService();
         userService.setUserDao(userDao());
+        userService.setTransactionManager(transactionManager());
         return userService;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
     }
 
     @Bean
