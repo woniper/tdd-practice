@@ -8,15 +8,16 @@ import net.woniper.tdd.toby.chapter6.dao.MockUserDao;
 import net.woniper.tdd.toby.chapter6.dao.UserDao;
 import net.woniper.tdd.toby.chapter6.mail.DummyMailSender;
 import net.woniper.tdd.toby.chapter6.mail.MockMailSender;
+import net.woniper.tdd.toby.chapter6.proxy.TxProxyFactoryBean;
 import net.woniper.tdd.toby.chapter6.service.TestUserService;
 import net.woniper.tdd.toby.chapter6.service.UserService;
 import net.woniper.tdd.toby.chapter6.service.UserServiceImpl;
-import net.woniper.tdd.toby.chapter6.service.UserServiceTx;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
@@ -44,9 +45,9 @@ import static org.springframework.test.util.AssertionErrors.fail;
 public class UserServiceTest {
 
     @Autowired private UserService userServiceTx;
-    @Autowired private UserServiceImpl userServiceImpl;
     @Autowired private UserDao userDao;
     @Autowired private PlatformTransactionManager transactionManager;
+    @Autowired private ApplicationContext context;
 
     List<User> users;
 
@@ -62,14 +63,16 @@ public class UserServiceTest {
     }
 
     @Test
+    @DirtiesContext
     public void upgradeAllOrNothing() throws Exception {
         TestUserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(userDao);
         testUserService.setMailSender(new DummyMailSender());
 
-        UserServiceTx userServiceTx = new UserServiceTx();
-        userServiceTx.setUserService(testUserService);
-        userServiceTx.setTransactionManager(transactionManager);
+        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+        txProxyFactoryBean.setTarget(testUserService);
+
+        UserService userServiceTx = (UserService) txProxyFactoryBean.getObject();
 
         userDao.deleteAll();
         for (User user : users) {

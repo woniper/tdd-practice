@@ -1,7 +1,7 @@
 package net.woniper.tdd.toby.chapter6.service;
 
-import net.woniper.tdd.toby.chapter6.User;
 import net.woniper.tdd.toby.chapter6.TestUserServiceException;
+import net.woniper.tdd.toby.chapter6.User;
 
 /**
  * Created by woniper on 2016. 12. 31..
