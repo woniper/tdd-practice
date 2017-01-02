@@ -2,11 +2,14 @@ package net.woniper.tdd.toby.chapter6;
 
 import net.woniper.tdd.toby.chapter6.dao.UserDao;
 import net.woniper.tdd.toby.chapter6.dao.UserDaoJdbc;
-import net.woniper.tdd.toby.chapter6.proxy.TxProxyFactoryBean;
+import net.woniper.tdd.toby.chapter6.proxy.TransactionAdvice;
 import net.woniper.tdd.toby.chapter6.service.UserService;
 import net.woniper.tdd.toby.chapter6.service.UserServiceImpl;
 import net.woniper.tdd.toby.chapter6.service.UserServiceTx;
 import net.woniper.tdd.toby.chapter6.test.MessageFactoryBean;
+import org.springframework.aop.framework.ProxyFactoryBean;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -24,12 +27,29 @@ import javax.sql.DataSource;
 public class DaoFactory {
 
     @Bean
-    public TxProxyFactoryBean userService() {
-        TxProxyFactoryBean factoryBean = new TxProxyFactoryBean();
+    public TransactionAdvice transactionAdvice() {
+        TransactionAdvice advice = new TransactionAdvice();
+        advice.setTransactionManager(transactionManager());
+        return advice;
+    }
+
+    @Bean
+    public NameMatchMethodPointcut transactionPointcut() {
+        NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+        pointcut.setMappedName("upgrade*");
+        return pointcut;
+    }
+
+    @Bean
+    public DefaultPointcutAdvisor transactionAdvisor() {
+        return new DefaultPointcutAdvisor(transactionPointcut(), transactionAdvice());
+    }
+
+    @Bean
+    public ProxyFactoryBean userService() {
+        ProxyFactoryBean factoryBean = new ProxyFactoryBean();
         factoryBean.setTarget(userServiceImpl());
-        factoryBean.setTransactionManager(transactionManager());
-        factoryBean.setPattern("upgradeLevels");
-        factoryBean.setServiceInterface(UserService.class);
+        factoryBean.addAdvisor(transactionAdvisor());
         return factoryBean;
     }
 

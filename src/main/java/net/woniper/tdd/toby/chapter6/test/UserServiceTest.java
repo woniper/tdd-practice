@@ -8,7 +8,6 @@ import net.woniper.tdd.toby.chapter6.dao.MockUserDao;
 import net.woniper.tdd.toby.chapter6.dao.UserDao;
 import net.woniper.tdd.toby.chapter6.mail.DummyMailSender;
 import net.woniper.tdd.toby.chapter6.mail.MockMailSender;
-import net.woniper.tdd.toby.chapter6.proxy.TxProxyFactoryBean;
 import net.woniper.tdd.toby.chapter6.service.TestUserService;
 import net.woniper.tdd.toby.chapter6.service.UserService;
 import net.woniper.tdd.toby.chapter6.service.UserServiceImpl;
@@ -16,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
@@ -69,7 +69,7 @@ public class UserServiceTest {
         testUserService.setUserDao(userDao);
         testUserService.setMailSender(new DummyMailSender());
 
-        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
         txProxyFactoryBean.setTarget(testUserService);
 
         UserService userServiceTx = (UserService) txProxyFactoryBean.getObject();
