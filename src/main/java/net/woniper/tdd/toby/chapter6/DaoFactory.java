@@ -2,14 +2,19 @@ package net.woniper.tdd.toby.chapter6;
 
 import net.woniper.tdd.toby.chapter6.dao.UserDao;
 import net.woniper.tdd.toby.chapter6.dao.UserDaoJdbc;
+import net.woniper.tdd.toby.chapter6.mail.DummyMailSender;
 import net.woniper.tdd.toby.chapter6.proxy.TransactionAdvice;
+import net.woniper.tdd.toby.chapter6.service.TestUserServiceImpl;
 import net.woniper.tdd.toby.chapter6.service.UserService;
 import net.woniper.tdd.toby.chapter6.service.UserServiceImpl;
 import net.woniper.tdd.toby.chapter6.service.UserServiceTx;
 import net.woniper.tdd.toby.chapter6.test.MessageFactoryBean;
+import org.aopalliance.aop.Advice;
+import org.springframework.aop.Advisor;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -27,21 +32,21 @@ import javax.sql.DataSource;
 public class DaoFactory {
 
     @Bean
-    public TransactionAdvice transactionAdvice() {
+    public Advice transactionAdvice() {
         TransactionAdvice advice = new TransactionAdvice();
         advice.setTransactionManager(transactionManager());
         return advice;
     }
 
     @Bean
-    public NameMatchMethodPointcut transactionPointcut() {
-        NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
-        pointcut.setMappedName("upgrade*");
+    public Pointcut transactionPointcut() {
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+        pointcut.setExpression("execution(* *..*ServiceImpl.upgrade*(..))");
         return pointcut;
     }
 
     @Bean
-    public DefaultPointcutAdvisor transactionAdvisor() {
+    public Advisor transactionAdvisor() {
         return new DefaultPointcutAdvisor(transactionPointcut(), transactionAdvice());
     }
 
@@ -51,6 +56,22 @@ public class DaoFactory {
         factoryBean.setTarget(userServiceImpl());
         factoryBean.addAdvisor(transactionAdvisor());
         return factoryBean;
+    }
+
+    @Bean
+    public ProxyFactoryBean testUserService() {
+        ProxyFactoryBean factoryBean = new ProxyFactoryBean();
+        factoryBean.setTarget(testUserServiceImpl());
+        factoryBean.addAdvisor(transactionAdvisor());
+        return factoryBean;
+    }
+
+    @Bean
+    public UserService testUserServiceImpl() {
+        TestUserServiceImpl testUserService = new TestUserServiceImpl();
+        testUserService.setUserDao(userDao());
+        testUserService.setMailSender(new DummyMailSender());
+        return testUserService;
     }
 
     @Bean

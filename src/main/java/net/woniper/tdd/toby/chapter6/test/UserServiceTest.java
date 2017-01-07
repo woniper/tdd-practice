@@ -6,33 +6,28 @@ import net.woniper.tdd.toby.chapter6.TestUserServiceException;
 import net.woniper.tdd.toby.chapter6.User;
 import net.woniper.tdd.toby.chapter6.dao.MockUserDao;
 import net.woniper.tdd.toby.chapter6.dao.UserDao;
-import net.woniper.tdd.toby.chapter6.mail.DummyMailSender;
 import net.woniper.tdd.toby.chapter6.mail.MockMailSender;
-import net.woniper.tdd.toby.chapter6.service.TestUserService;
 import net.woniper.tdd.toby.chapter6.service.UserService;
 import net.woniper.tdd.toby.chapter6.service.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.PlatformTransactionManager;
 
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.List;
 
 import static net.woniper.tdd.toby.chapter5.service.UserService.MIN_LOGCOUNT_FOR_SILBER;
 import static net.woniper.tdd.toby.chapter5.service.UserService.MIN_RECOMMEND_FOR_GOLD;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.fail;
 
@@ -41,13 +36,12 @@ import static org.springframework.test.util.AssertionErrors.fail;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DaoFactory.class)
-@DirtiesContext
+//@DirtiesContext
 public class UserServiceTest {
 
-    @Autowired private UserService userServiceTx;
+    @Autowired private UserService userService;
+    @Autowired private UserService testUserService;
     @Autowired private UserDao userDao;
-    @Autowired private PlatformTransactionManager transactionManager;
-    @Autowired private ApplicationContext context;
 
     List<User> users;
 
@@ -63,29 +57,25 @@ public class UserServiceTest {
     }
 
     @Test
-    @DirtiesContext
+//    @DirtiesContext
     public void upgradeAllOrNothing() throws Exception {
-        TestUserService testUserService = new TestUserService(users.get(3).getId());
-        testUserService.setUserDao(userDao);
-        testUserService.setMailSender(new DummyMailSender());
-
-        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
-        txProxyFactoryBean.setTarget(testUserService);
-
-        UserService userServiceTx = (UserService) txProxyFactoryBean.getObject();
-
         userDao.deleteAll();
         for (User user : users) {
             userDao.add(user);
         }
 
         try {
-            userServiceTx.upgradeLevels();
+            testUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         } catch(TestUserServiceException e) {
         }
 
         checkLevelUpgrade(users.get(1), false);
+    }
+
+    @Test
+    public void advisorAutoProxyCreator() throws Exception {
+        assertThat(testUserService, instanceOf(Proxy.class));
     }
 
     @Test
@@ -95,8 +85,8 @@ public class UserServiceTest {
         User userWithLevel = users.get(4);
         User userWithoutLevel = users.get(0);
 
-        userServiceTx.add(userWithLevel);
-        userServiceTx.add(userWithoutLevel);
+        userService.add(userWithLevel);
+        userService.add(userWithoutLevel);
 
         User userWithLevelRead = userDao.get(userWithLevel.getId());
         User userWithoutLevelRead = userDao.get(userWithoutLevel.getId());
@@ -158,7 +148,7 @@ public class UserServiceTest {
 
     @Test
     public void bean() throws Exception {
-        assertThat(this.userServiceTx, is(notNullValue()));
+        assertThat(this.userService, is(notNullValue()));
     }
 
     private void checkUserAndLevel(User updated, String expectedId, Level level) {

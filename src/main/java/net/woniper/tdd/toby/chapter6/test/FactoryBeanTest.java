@@ -8,9 +8,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by woniper on 2017. 1. 2..
@@ -24,13 +24,13 @@ public class FactoryBeanTest {
     @Test
     public void getMessageFromFactoryBean() throws Exception {
         Object message = context.getBean("message");
-        assertTrue(message.getClass() == Message.class);
+        assertThat(message, instanceOf(Message.class));
         assertThat(((Message)message).getText(), is("Factory Bean"));
     }
 
     @Test
     public void getFactoryBean() throws Exception {
         Object factoryBean = context.getBean("&message");
-        assertTrue(factoryBean.getClass() == MessageFactoryBean.class);
+        assertThat(factoryBean, instanceOf(MessageFactoryBean.class));
     }
 }
