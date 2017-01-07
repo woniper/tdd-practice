@@ -2,11 +2,11 @@ package net.woniper.tdd.toby.chapter6.test;
 
 import net.woniper.tdd.toby.chapter6.DaoFactory;
 import net.woniper.tdd.toby.chapter6.Level;
-import net.woniper.tdd.toby.chapter6.service.TestUserServiceException;
 import net.woniper.tdd.toby.chapter6.User;
 import net.woniper.tdd.toby.chapter6.dao.MockUserDao;
 import net.woniper.tdd.toby.chapter6.dao.UserDao;
 import net.woniper.tdd.toby.chapter6.mail.MockMailSender;
+import net.woniper.tdd.toby.chapter6.service.TestUserServiceException;
 import net.woniper.tdd.toby.chapter6.service.UserService;
 import net.woniper.tdd.toby.chapter6.service.UserServiceImpl;
 import org.junit.Before;
@@ -16,8 +16,12 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
@@ -36,12 +40,12 @@ import static org.springframework.test.util.AssertionErrors.fail;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DaoFactory.class)
-//@DirtiesContext
 public class UserServiceTest {
 
     @Autowired private UserService userService;
     @Autowired private UserService testUserService;
     @Autowired private UserDao userDao;
+    @Autowired private PlatformTransactionManager transactionManager;
 
     List<User> users;
 
@@ -57,7 +61,20 @@ public class UserServiceTest {
     }
 
     @Test
-//    @DirtiesContext
+    public void transactionSync() throws Exception {
+        DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
+        TransactionStatus status = transactionManager.getTransaction(txDefinition);
+
+        try {
+            userService.deleteAll();
+            userService.add(users.get(0));
+            userService.add(users.get(1));
+        } finally {
+            transactionManager.rollback(status);
+        }
+    }
+
+    @Test
     public void upgradeAllOrNothing() throws Exception {
         userDao.deleteAll();
         for (User user : users) {
@@ -79,6 +96,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Rollback
     public void add() throws Exception {
         userDao.deleteAll();
 
