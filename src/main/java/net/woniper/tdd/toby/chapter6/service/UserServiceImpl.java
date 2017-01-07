@@ -5,12 +5,14 @@ import net.woniper.tdd.toby.chapter6.User;
 import net.woniper.tdd.toby.chapter6.dao.UserDao;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by woniper on 2016. 12. 31..
  */
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
@@ -39,12 +41,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User get(String id) {
+        return userDao.get(id);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userDao.getAll();
+    }
+
+    @Override
     public void add(User user) {
         if(user.getLevel() == null) {
             user.setLevel(Level.BASIC);
         }
 
         userDao.add(user);
+    }
+
+    @Override
+    public void deleteAll() {
+        userDao.deleteAll();
+    }
+
+    @Override
+    public void update(User user) {
+        userDao.update(user);
     }
 
     /**

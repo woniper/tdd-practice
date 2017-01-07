@@ -1,4 +1,4 @@
-package net.woniper.tdd.toby.chapter6.proxy;
+package net.woniper.tdd.toby.chapter6.transaction;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;

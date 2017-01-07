@@ -1,4 +1,4 @@
-package net.woniper.tdd.toby.chapter6;
+package net.woniper.tdd.toby.chapter6.service;
 
 /**
  * Created by woniper on 2016. 12. 31..

@@ -2,7 +2,7 @@ package net.woniper.tdd.toby.chapter6.test;
 
 import net.woniper.tdd.toby.chapter6.DaoFactory;
 import net.woniper.tdd.toby.chapter6.Level;
-import net.woniper.tdd.toby.chapter6.TestUserServiceException;
+import net.woniper.tdd.toby.chapter6.service.TestUserServiceException;
 import net.woniper.tdd.toby.chapter6.User;
 import net.woniper.tdd.toby.chapter6.dao.MockUserDao;
 import net.woniper.tdd.toby.chapter6.dao.UserDao;

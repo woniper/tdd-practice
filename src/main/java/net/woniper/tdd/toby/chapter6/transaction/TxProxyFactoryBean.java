@@ -1,4 +1,4 @@
-package net.woniper.tdd.toby.chapter6.proxy;
+package net.woniper.tdd.toby.chapter6.transaction;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;

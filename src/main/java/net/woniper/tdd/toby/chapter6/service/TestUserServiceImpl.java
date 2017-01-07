@@ -1,6 +1,5 @@
 package net.woniper.tdd.toby.chapter6.service;
 
-import net.woniper.tdd.toby.chapter6.TestUserServiceException;
 import net.woniper.tdd.toby.chapter6.User;
 
 /**
