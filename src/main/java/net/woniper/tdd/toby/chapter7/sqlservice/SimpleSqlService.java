@@ -1,4 +1,4 @@
-package net.woniper.tdd.toby.chapter7.service;
+package net.woniper.tdd.toby.chapter7.sqlservice;
 
 import java.util.Map;
 

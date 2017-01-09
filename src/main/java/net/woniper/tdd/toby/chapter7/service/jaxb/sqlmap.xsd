@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.woniper.net/sqlmap"
+        xmlns:tns="http://www.woniper.net/sqlmap"
+        elementFormDefault="qualified">
+    <element name="sqlmap">
+        <complexType>
+            <sequence>
+                <element name="sql" maxOccurs="unbounded" type="tns:sqlType" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="sqlType">
+        <simpleContent>
+            <extension base="string">
+                <attribute name="key" use="required" type="string" />
+            </extension>
+        </simpleContent>
+    </complexType>
+</schema>

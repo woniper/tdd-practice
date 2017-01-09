@@ -3,7 +3,10 @@ package net.woniper.tdd.toby.chapter7;
 import net.woniper.tdd.toby.chapter7.dao.UserDao;
 import net.woniper.tdd.toby.chapter7.dao.UserDaoJdbc;
 import net.woniper.tdd.toby.chapter7.mail.DummyMailSender;
-import net.woniper.tdd.toby.chapter7.service.*;
+import net.woniper.tdd.toby.chapter7.service.TestUserServiceImpl;
+import net.woniper.tdd.toby.chapter7.service.UserService;
+import net.woniper.tdd.toby.chapter7.service.UserServiceImpl;
+import net.woniper.tdd.toby.chapter7.sqlservice.*;
 import net.woniper.tdd.toby.chapter7.test.MessageFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +18,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by woniper on 2016. 12. 26..
@@ -27,17 +28,19 @@ public class DaoFactory {
 
     @Bean
     public SqlService sqlService() {
-        SimpleSqlService sqlService = new SimpleSqlService();
-        Map<String, String> sqlMap = new HashMap<>();
-        sqlMap.put("userAdd", "insert into users(id, name, password, level, login, recommend) values(?, ?, ?, ?, ?, ?)");
-        sqlMap.put("userGet", "select * from users where id= ?");
-        sqlMap.put("userGetAll", "select * from users order by id");
-        sqlMap.put("userDeleteAll", "delete from users");
-        sqlMap.put("userGetCount", "select count(*) from users");
-        sqlMap.put("userUpdate", "update users set name = ?, password = ?, level = ?, login = ?, recommend = ? where id = ?");
-        sqlService.setSqlMap(sqlMap);
+        return new DefaultSqlService();
+    }
 
-        return sqlService;
+    @Bean
+    public SqlRegistry sqlRegistry() {
+        return new HashMapSqlRegistry();
+    }
+
+    @Bean
+    public SqlReader sqlReader() {
+        JaxbXmlSqlReader sqlReader = new JaxbXmlSqlReader();
+        sqlReader.setSqlmapFile("sqlmap.xml");
+        return sqlReader;
     }
 
     @Bean

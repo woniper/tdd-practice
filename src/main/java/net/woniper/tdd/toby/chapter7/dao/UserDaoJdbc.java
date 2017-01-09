@@ -2,7 +2,7 @@ package net.woniper.tdd.toby.chapter7.dao;
 
 import net.woniper.tdd.toby.chapter7.Level;
 import net.woniper.tdd.toby.chapter7.User;
-import net.woniper.tdd.toby.chapter7.service.SqlService;
+import net.woniper.tdd.toby.chapter7.sqlservice.SqlService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
