@@ -1,6 +1,5 @@
 package net.woniper.tdd.toby.chapter7.sqlservice;
 
-import net.woniper.tdd.toby.chapter6.dao.UserDao;
 import net.woniper.tdd.toby.chapter7.service.jaxb.SqlType;
 import net.woniper.tdd.toby.chapter7.service.jaxb.Sqlmap;
 
@@ -29,7 +28,7 @@ public class JaxbXmlSqlReader implements SqlReader {
         try {
             JAXBContext context = JAXBContext.newInstance(contextPath);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            InputStream is = UserDao.class.getClassLoader().getResourceAsStream(this.sqlmapFile);
+            InputStream is = getClass().getResourceAsStream(this.sqlmapFile);
             Sqlmap sqlmap = (Sqlmap)unmarshaller.unmarshal(is);
 
             for (SqlType sql : sqlmap.getSql()) {

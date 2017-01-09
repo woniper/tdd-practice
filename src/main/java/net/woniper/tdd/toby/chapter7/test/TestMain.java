@@ -16,6 +16,7 @@ public class TestMain {
                 "net.woniper.tdd.toby.chapter7.test.ReflectionTest",
                 "net.woniper.tdd.toby.chapter7.test.ProxyTest",
                 "net.woniper.tdd.toby.chapter7.test.FactoryBeanTest",
-                "net.woniper.tdd.toby.chapter7.service.jaxb.JaxbTest");
+                "net.woniper.tdd.toby.chapter7.service.jaxb.JaxbTest",
+                "net.woniper.tdd.toby.chapter7.service.jaxb.OxmTest");
     }
 }

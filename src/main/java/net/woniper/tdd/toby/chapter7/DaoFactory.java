@@ -10,10 +10,12 @@ import net.woniper.tdd.toby.chapter7.sqlservice.*;
 import net.woniper.tdd.toby.chapter7.test.MessageFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.oxm.castor.CastorMarshaller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -28,7 +30,19 @@ public class DaoFactory {
 
     @Bean
     public SqlService sqlService() {
-        return new DefaultSqlService();
+        OxmSqlService sqlService = new OxmSqlService();
+        sqlService.setUnmarshaller(unmarshaller());
+        sqlService.setSqlmapFile("sqlmap.xml");
+        sqlService.setSqlRegistry(new HashMapSqlRegistry());
+        sqlService.setSqlmap(new ClassPathResource("net/woniper/tdd/toby/chapter7/dao/sqlmap.xml"));
+        return sqlService;
+    }
+
+    @Bean
+    public CastorMarshaller unmarshaller() {
+        CastorMarshaller marshaller = new CastorMarshaller();
+        marshaller.setMappingLocation(new ClassPathResource("mapping.xml", BaseSqlService.class));
+        return marshaller;
     }
 
     @Bean
